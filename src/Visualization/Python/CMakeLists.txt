@@ -15,6 +15,7 @@ spectre_python_add_module(
   PlotCce.py
   PlotControlSystem.py
   PlotDatFile.py
+  PlotEccentricityControlGL.py
   PlotEllipticConvergence.py
   PlotMemoryMonitors.py
   PlotPowerMonitors.py
