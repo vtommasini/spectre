@@ -45,7 +45,7 @@ class PlotCommands(click.MultiCommand):
             return plot_dat_command
         elif name == "eccentricity-control":
             from spectre.Visualization.EccentricityControlGL import (
-            eccentricity_control_command,
+                eccentricity_control_command,
             )
 
             return eccentricity_control_command

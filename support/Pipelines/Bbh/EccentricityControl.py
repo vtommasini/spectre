@@ -5,7 +5,9 @@ import logging
 import os
 import subprocess
 import time
+from pathlib import Path
 
+import click
 import numpy as np
 
 import spectre.IO.H5 as spectre_h5
@@ -13,6 +15,7 @@ from spectre.Pipelines.Bbh.InitialData import generate_id
 from spectre.Pipelines.EccentricityControl.EccentricityControl import (
     coordinate_separation_eccentricity_control,
 )
+from spectre.support.Schedule import schedule, scheduler_options
 from spectre.Visualization.ReadH5 import available_subfiles, to_dataframe
 
 # Configure logging
@@ -163,3 +166,34 @@ def autoecc_control(
     #     logger.info(f'Completed iteration {iteration}')
 
     # logger.info('Auto-eccentricity control finished')
+
+    # Schedule!
+    return schedule(
+        ringdown_input_file_template,
+        **autoecc_control,
+        **scheduler_kwargs,
+        pipeline_dire=pipeline_dir,
+        run_dir=run_dir,
+        segments_dir=segments_dir,
+    )
+
+
+@click.command(name="autoecc-control", help=autoecc_control.__doc__)
+@click.argument(
+    "inspiral_input_file_path",
+    type=click.Path(
+        exists=True,
+        file_okay=True,
+        dir_okay=False,
+        readable=True,
+        path_type=Path,
+    ),
+)
+@scheduler_options
+def autoecc_control_command(**kwargs):
+    _rich_traceback_guard = True
+    autoecc_control(**kwargs)
+
+
+if __name__ == "__main__":
+    autoecc_control_command(help_option_names=["-h", "--help"])

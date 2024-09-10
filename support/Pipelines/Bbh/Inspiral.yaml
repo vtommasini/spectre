@@ -17,8 +17,19 @@ Next:
     submit: True
 {% elif eccentricity_control %}
 Next:
-  Run: spectre.Pipelines.Bbh.EccentricityControl:autoecc_control
+  Run: spectre.Pipelines.Bbh.EccentricityControl:ecc_control
   With:
+    segments_dir: "__CURRENT_DIR__" #Placeholder for the current directory
+    filenamedir: Segment_0000
+    tmin: 3000
+    tmax: 3800
+    angular_velocity_from_xcts: 0.014
+    expansion_from_xcts: -1
+    pipeline_dir: {{ pipeline_dir }}
+    scheduler: {{ scheduler | default("None") }}
+    copy_executable: {{ copy_executable | default("None") }}
+    submit_script_template: {{ submit_script_template | default("None") }}
+    submit: True
 {% endif %}
 
 ---
@@ -140,8 +151,8 @@ DomainCreator:
 Evolution:
   InitialTime: *InitialTime
   InitialTimeStep: 0.0002
-  # This is the smallest interval we'd need to observe time step/constraints. If
-  # you need it smaller you can edit it, but make sure to change the slab
+  # This is the smallest interval we'd need to observe time step/constraints.
+  # If you need it smaller you can edit it, but make sure to change the slab
   # intervals in the EventsAndTriggers
   InitialSlabSize: 0.5
   StepChoosers:
@@ -329,7 +340,13 @@ EventsAndTriggers:
         Value: 2.5
     Events:
       - ObservationAhC
-  # Never terminate... run until something fails!
+  # run very short inspiral
+  - Trigger:
+      TimeCompares:
+        Comparison: GreaterThan
+        Value: 100
+    Events:
+      - Completion
 
 EventsAndDenseTriggers:
   # BondiSachs output needs to be often enough for CCE to run properly. An
