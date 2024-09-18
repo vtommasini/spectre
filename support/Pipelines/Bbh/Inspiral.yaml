@@ -17,19 +17,16 @@ Next:
     submit: True
 {% elif eccentricity_control %}
 Next:
-  Run: spectre.Pipelines.Bbh.EccentricityControl:ecc_control
+  Run: spectre.Pipelines.Bbh.EccentricityControlMinimal:ecc_control_fit
   With:
-    segments_dir: "__CURRENT_DIR__" #Placeholder for the current directory
-    filenamedir: Segment_0000
+    h5_file: ./BbhReductions.h5
+    subfile_name_aha: ApparentHorizons/ControlSystemAhA_Centers.dat
+    subfile_name_ahb: ApparentHorizons/ControlSystemAhB_Centers.dat
     tmin: 3000
     tmax: 3800
     angular_velocity_from_xcts: 0.014
     expansion_from_xcts: -1
-    pipeline_dir: {{ pipeline_dir }}
-    scheduler: {{ scheduler | default("None") }}
-    copy_executable: {{ copy_executable | default("None") }}
-    submit_script_template: {{ submit_script_template | default("None") }}
-    submit: True
+    output: ecc_control.pdf
 {% endif %}
 
 ---

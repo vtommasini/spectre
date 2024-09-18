@@ -8,6 +8,7 @@ spectre_python_add_module(
   __init__.py
   ControlId.py
   EccentricityControl.py
+  EccentricityControlMinimal.py
   FindHorizon.py
   InitialData.py
   InitialData.yaml
